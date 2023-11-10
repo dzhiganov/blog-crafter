@@ -1,12 +1,9 @@
-import { FastifyInstance, FastifyServerOptions } from "fastify";
+import { FastifyInstance } from "fastify";
 import fetch from "node-fetch";
 import { getGetContentURL } from "../endpoints.js";
 import { GIT_HUB_API_HEADERS } from "../constants.js";
 
-export default async function (
-  fastify: FastifyInstance,
-  opts: FastifyServerOptions
-) {
+export default async function (fastify: FastifyInstance) {
   fastify.get("/content", async (res, reply) => {
     const responseContent = await fetch(
       `${getGetContentURL(
