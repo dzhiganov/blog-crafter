@@ -1,12 +1,14 @@
 <script setup lang="ts">
+import { useGetAccessToken } from '@/queries/get-access-token'
 import Cookies from 'js-cookie'
-import { onMounted } from 'vue'
+import { onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const CLIENT_ID = '3770f00f3de023a8260b'
 
 const router = useRouter()
 const route = useRoute()
+const { data: accessToken } = useGetAccessToken(route.query.code ? String(route.query.code) : '')
 
 const openAuth = () => {
   window.location.assign(
@@ -14,12 +16,14 @@ const openAuth = () => {
   )
 }
 
-onMounted(() => {
-  if (route.query.code) {
-    Cookies.set('github-api-code', String(route.query.code), { secure: true })
-  }
+watch(accessToken, () => {
+  console.log('accessToken.value', accessToken.value)
+  Cookies.set('github-access-token', String(accessToken.value), { secure: true })
+  router.replace('/dashboard')
+})
 
-  if (Cookies.get('github-api-code')) {
+onMounted(() => {
+  if (Cookies.get('github-access-token')) {
     router.replace('/dashboard')
   }
 })

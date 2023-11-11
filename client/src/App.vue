@@ -5,7 +5,7 @@ import Cookies from 'js-cookie'
 const router = useRouter()
 
 router.beforeEach(async (to) => {
-  const code = Cookies.get('github-api-code')
+  const code = Cookies.get('github-access-token')
 
   if (!code && to.name !== 'Login') {
     return { name: 'Login' }

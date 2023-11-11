@@ -6,7 +6,7 @@ import cors from "@fastify/cors";
 export async function build(opts = {}) {
   const app = fastify(opts);
 
-  await app.register(cors);
+  app.register(cors);
 
   app.register(autoload, {
     dir: join(import.meta.url, "modules"),

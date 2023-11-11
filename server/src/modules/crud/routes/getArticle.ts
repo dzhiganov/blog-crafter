@@ -10,22 +10,29 @@ export default async function (
 ) {
   fastify.get("/content/:path", async (res, reply) => {
     const { path } = res.params as any;
+    const token = res.headers[`x-github-token`];
+
     const responseContent = await fetch(
       getGetContentURL("delawere", "photography_blog", path) + "?ref=main",
       {
         method: "GET",
-        headers: GIT_HUB_API_HEADERS,
+        headers: {
+          ...GIT_HUB_API_HEADERS,
+          Authorization: `Bearer ${token}`,
+        },
       }
     );
 
-    const data = await responseContent.json();
+    console.log(responseContent, "responseContent");
 
-    const itemsCollection = Array.isArray(data) ? data : [data];
+    // const data = await responseContent.json();
 
-    const response = await fetch(itemsCollection[0].download_url);
-    const md = await response.text();
+    // const itemsCollection = Array.isArray(data) ? data : [data];
 
-    reply.code(200).send(toObject(md));
+    // const response = await fetch(itemsCollection[0].download_url);
+    // const md = await response.text();
+
+    // reply.code(200).send(toObject(md));
   });
 }
 
@@ -47,11 +54,12 @@ function toObject(text: string) {
   function getMarkdownHeader(data: string) {
     const strReg = "^" + start + "([\\s|\\S]*?)" + end;
     const reg = new RegExp(strReg);
-    const file = reg.exec(data);
+    const file = reg.exec(text);
     return file ? file[1] : "";
   }
 
   function getMarkdownContent(data: string) {
+    console.log("data", data);
     const strReg = "^ *?\\" + start + "[^]*?" + end + "*";
     const reg = new RegExp(strReg);
     const content = data.replace(reg, "");
