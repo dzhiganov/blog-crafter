@@ -23,16 +23,22 @@ export default async function (
       }
     );
 
-    console.log(responseContent, "responseContent");
+    const [data] = (await responseContent.json()) || [];
 
-    // const data = await responseContent.json();
-
-    // const itemsCollection = Array.isArray(data) ? data : [data];
-
-    // const response = await fetch(itemsCollection[0].download_url);
-    // const md = await response.text();
-
-    // reply.code(200).send(toObject(md));
+    if (!data) {
+      reply.code(404).send({
+        message: "Article was not found",
+      });
+    } else {
+      const { download_url } = data;
+      const contentResponse = await fetch(download_url, {
+        headers: {
+          ["Content-Type"]: "text/markdown; charset=UTF-8",
+        },
+      });
+      const md = await contentResponse.text();
+      reply.code(200).send(toObject(md));
+    }
   });
 }
 

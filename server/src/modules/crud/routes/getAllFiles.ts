@@ -1,10 +1,11 @@
+import { GIT_HUB_API_HEADERS } from "../constants.js";
 import { FastifyInstance } from "fastify";
 import fetch from "node-fetch";
 import { getGetContentURL } from "../endpoints.js";
-import { GIT_HUB_API_HEADERS } from "../constants.js";
 
 export default async function (fastify: FastifyInstance) {
   fastify.get("/content", async (res, reply) => {
+    const token = res.headers[`x-github-token`];
     const responseContent = await fetch(
       `${getGetContentURL(
         "delawere",
@@ -13,7 +14,10 @@ export default async function (fastify: FastifyInstance) {
       )}?ref=main`,
       {
         method: "GET",
-        headers: GIT_HUB_API_HEADERS,
+        headers: {
+          ...GIT_HUB_API_HEADERS,
+          Authorization: `Bearer ${token}`,
+        },
       }
     );
 

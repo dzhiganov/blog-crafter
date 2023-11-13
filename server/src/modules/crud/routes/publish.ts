@@ -5,7 +5,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import { FastifyInstance, FastifyServerOptions } from "fastify";
-import { uploadToRepo } from "../utils.js";
+import { Articles } from "../utils.js";
 import MarkdownIt from "markdown-it";
 
 type PublishRequestBody = {
@@ -18,26 +18,85 @@ export default async function (
   fastify: FastifyInstance,
   opts: FastifyServerOptions
 ) {
-  fastify.post<{ Body: PublishRequestBody; Reply: any }>(
+  fastify.put<{ Body: PublishRequestBody; Reply: any }>(
     "/publish",
-    async function handler(request, reply) {
-      const { path: pathToFile = "", meta = {}, content = "" } = request.body;
+    async function handler(req, reply) {
+      const { path: pathInRepo = "", meta = {}, content = "" } = req.body;
+      const token = req.headers[`x-github-token`];
 
-      const mdIt = new MarkdownIt();
-      const result = mdIt.render("# markdown-it rulezz!");
+      let md = NodeHtmlMarkdown.translate(content);
+      let metaText = "---\n ";
 
-      const md = NodeHtmlMarkdown.translate(content);
+      for (let [k, v] of Object.entries(meta)) {
+        metaText += `${k}: ${v}\n`;
+      }
+
+      md = `${metaText}---\n${md}`;
       const REPO = "photography_blog";
       const BRANCH = "main";
       const __filename = fileURLToPath(import.meta.url);
       const __dirname = dirname(__filename);
       const workspacePath = path.join(__dirname, "../../..", "md");
+
+      const fullPathToFile = path.join(workspacePath, "test.md");
+      const articlesCRUD = new Articles(String(token));
+
       try {
-        await fs.writeFile(pathToFile, md);
-        await uploadToRepo(workspacePath, REPO, BRANCH);
-        unlink(pathToFile);
+        await fs.writeFile(fullPathToFile, md);
+        await articlesCRUD.uploadToRepo(
+          fullPathToFile,
+          pathInRepo,
+          REPO,
+          BRANCH
+        );
+        unlink(fullPathToFile);
       } catch (err) {
-        console.log(err);
+        console.log(`Error:`, err);
+      }
+    }
+  );
+
+  type CreateNewArticleRequestBody = {
+    name: string;
+    meta: Record<string, string>;
+    content: string;
+  };
+
+  fastify.post<{ Body: CreateNewArticleRequestBody; Reply: any }>(
+    "/publish",
+    async (req, res) => {
+      const { name = "", meta = {}, content = "" } = req.body;
+      const token = req.headers[`x-github-token`];
+
+      let md = NodeHtmlMarkdown.translate(content);
+      let metaText = "---\n";
+
+      for (let [k, v] of Object.entries(meta)) {
+        metaText += `${k.trim()}: ${v.trim()}\n`;
+      }
+
+      md = `${metaText}---\n${md}`;
+      const REPO = "photography_blog";
+      const BRANCH = "main";
+      const __filename = fileURLToPath(import.meta.url);
+      const __dirname = dirname(__filename);
+      const workspacePath = path.join(__dirname, "../../..", "md");
+      const pathInRepo = `content/blog/${name}`;
+
+      const fullPathToFile = path.join(workspacePath, "test.md");
+      const articlesCRUD = new Articles(String(token));
+
+      try {
+        await fs.writeFile(fullPathToFile, md);
+        await articlesCRUD.uploadToRepo(
+          fullPathToFile,
+          pathInRepo,
+          REPO,
+          BRANCH
+        );
+        unlink(fullPathToFile);
+      } catch (err) {
+        console.log(`Error:`, err);
       }
     }
   );

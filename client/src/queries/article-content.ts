@@ -14,29 +14,11 @@ export function useGetArticleContentQuery(path: string): ReturnType<typeof useQu
     queryFn: async ({ queryKey }) => {
       const { data } = await axios.get(`${SERVER_URL}/content/${queryKey[1]}`, {
         headers: {
-          [`x-github-token`]: `${Cookie.get('github-api-code')}`
+          [`x-github-token`]: `${Cookie.get('github-access-token')}`
         }
       })
       return data
     },
     enabled: !!path
-  })
-}
-
-export type ArticlePayload = {
-  path: string
-  meta: Record<string, string>
-  content: string
-}
-
-export function useUpdateArticle(): ReturnType<typeof useMutation> {
-  return useMutation<unknown, unknown, any>({
-    mutationFn: async ({ path, meta, content }) => {
-      await axios.post(`${SERVER_URL}/publish`, {
-        path,
-        meta,
-        content
-      })
-    }
   })
 }

@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:dev": "npm run start:dev --prefix server & npm run dev --prefix client"
+    "start:dev": "npm run start:dev --prefix server & npm run start:dev --prefix client"
   },
   "author": "",
   "license": "ISC"

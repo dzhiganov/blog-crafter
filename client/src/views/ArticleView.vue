@@ -37,6 +37,13 @@ function handleSave() {
     content: editor.value?.getHTML()
   })
 }
+
+function handleChange(key, val) {
+  fields.value = {
+    ...fields.value,
+    [key]: val
+  }
+}
 </script>
 <template>
   <div>
@@ -46,7 +53,7 @@ function handleSave() {
   <div :class="$style.inputs">
     <template v-for="[key, val] in Object.entries(fields)" :key="key">
       <label :for="key" :class="$style.label">{{ key }}</label>
-      <input :id="key" :value="val" />
+      <input :id="key" :value="val" @input="(event) => handleChange(key, event.target.value)" />
     </template>
   </div>
   <h2 v-if="!isLoading">Content</h2>

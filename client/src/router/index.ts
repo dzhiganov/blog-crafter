@@ -16,6 +16,10 @@ const router = createRouter({
       component: HomeView
     },
     {
+      path: '/articles/new',
+      component: () => import('../views/NewArticleView.vue')
+    },
+    {
       path: '/articles/:id',
       component: () => import('../views/ArticleView.vue')
     }
