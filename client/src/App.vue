@@ -1,8 +1,13 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import Cookies from 'js-cookie'
+import { useGetUser } from '@/queries/get-user'
 
 const router = useRouter()
+const { data: user, isLoading } = useGetUser()
+const { bio, name, avatar_url } = user.value || {}
+
+console.log('user', user)
 
 router.beforeEach(async (to) => {
   const code = Cookies.get('github-access-token')
@@ -14,74 +19,33 @@ router.beforeEach(async (to) => {
 </script>
 
 <template>
-  <header>Blog Crafter</header>
-  <RouterView />
+  <header>
+    <h1 :class="$style.logo">Blog Crafter</h1>
+    <div v-if="!isLoading">
+      <v-avatar color="grey" size="50" rounded="50%">
+        <v-img cover :src="avatar_url"></v-img>
+      </v-avatar>
+      {{ name }}
+      {{ bio }}
+    </div>
+  </header>
+  <main><RouterView /></main>
 </template>
 
-<style scoped>
+<style module>
 header {
   line-height: 1.5;
   max-height: 100vh;
+  padding: 2rem 2rem 2rem 2rem;
 }
 
-body {
-  max-width: 1000px;
+main {
+  padding: 0 2rem 0 2rem;
 }
 
 .logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+  color: #5865f2;
+  font-weight: 700;
+  font-size: 46px;
 }
 </style>

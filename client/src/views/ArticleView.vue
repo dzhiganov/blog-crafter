@@ -47,15 +47,20 @@ function handleChange(key, val) {
 </script>
 <template>
   <div>
-    <button @click="handleSave">Save</button>
+    <v-btn variant="tonal" color="#5865f2" class="text-subtitle-1" @click="handleSave">Save</v-btn>
   </div>
-  <h2 v-if="!isLoading">Meta</h2>
-  <div :class="$style.inputs">
-    <template v-for="[key, val] in Object.entries(fields)" :key="key">
-      <label :for="key" :class="$style.label">{{ key }}</label>
-      <input :id="key" :value="val" @input="(event) => handleChange(key, event.target.value)" />
-    </template>
+  <v-skeleton-loader width="500" v-if="isLoading" type="article"></v-skeleton-loader>
+  <div v-if="!isLoading">
+    <h2>Meta</h2>
+    <div :class="$style.inputs">
+      <template v-for="[key, val] in Object.entries(fields)" :key="key">
+        <label :for="key" :class="$style.label">{{ key }}</label>
+        <input :id="key" :value="val" @input="(event) => handleChange(key, event.target.value)" />
+      </template>
+    </div>
+    <v-btn variant="tonal" density="comfortable" class="text-subtitle-1">Add field</v-btn>
   </div>
+
   <h2 v-if="!isLoading">Content</h2>
   <editor-content :editor="editor" />
 </template>

@@ -1,61 +1,37 @@
 <script setup lang="ts">
-import { useCssModule } from 'vue'
-import IconImage from '@/components/icons/IconImage.vue'
-
-const cssModule = useCssModule()
-
-const icons = {
-  bold: {
-    icon: 'B',
-    class: cssModule.bold
-  },
-  italic: {
-    icon: 'I',
-    class: cssModule.italic
-  },
-  image: {
-    icon: 'Image'
-  },
-  h1: {
-    icon: 'H1'
-  },
-  h2: {
-    icon: 'H2'
-  },
-  h3: {
-    icon: 'H3'
-  }
-}
-
 defineProps({
   iconName: String,
   handleClick: Function
 })
 </script>
 <template>
-  <button @click="handleClick" :class="[icons[iconName].class, $style.button]">
-    {{ icons[iconName].icon }}
+  <button class="button" @click="handleClick">
+    <template v-if="iconName === 'bold'"><v-icon icon="format_bold" /></template>
+    <template v-if="iconName === 'italic'"><v-icon icon="format_italic" /></template>
+    <template v-if="iconName === 'h1'"><span class="btn-title__bold">H1</span></template>
+    <template v-if="iconName === 'h2'"><span class="btn-title__bold">H2</span></template>
+    <template v-if="iconName === 'h3'"><span class="btn-title__bold">H3</span></template>
+    <template v-if="iconName === 'image'"><v-icon icon="image" /></template>
   </button>
 </template>
-<style module>
-.bold {
-  font-weight: 600;
-}
 
-.italic {
-  font-style: italic;
+<style scoped>
+.btn-title__bold {
+  font-weight: 800;
 }
 
 .button {
-  background-color: #e0e0e0;
-  padding: 0.25em 0.5em;
-  font-size: 1.2em;
-  border-radius: 6px;
-  border: 1px solid #848484;
-  cursor: pointer;
-  min-width: 32px;
+  min-width: 0;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  border-radius: 4px;
+  width: 38px;
+  height: 38px;
+}
+
+.button:hover {
+  background-color: #e7e7e7;
 }
 </style>

@@ -1,13 +1,12 @@
 <script lang="ts" setup>
-import { ref, watch, useCssModule } from 'vue'
-import { marked } from 'marked'
+import { ref, useCssModule } from 'vue'
 import { useEditor, EditorContent } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
 import Image from '@tiptap/extension-image'
 import { useRoute } from 'vue-router'
 import { useCreateNewArticle } from '@/queries/articles'
-import IconImage from '@/components/icons/IconImage.vue'
 import EditorButton from '@/components/EditorButton.vue'
+import Placeholder from '@tiptap/extension-placeholder'
 
 const cssModule = useCssModule()
 
@@ -25,7 +24,10 @@ const editor = useEditor({
         }
       }
     }),
-    Image.configure({ inline: true })
+    Image.configure({ inline: true }),
+    Placeholder.configure({
+      placeholder: 'Write something …'
+    })
   ],
   editorProps: {
     attributes: {
@@ -33,15 +35,14 @@ const editor = useEditor({
     }
   }
 })
-const fields = ref([])
+const fields = ref<[string, string][]>([])
 const name = ref('')
 
 const { mutate: createNewArticle } = useCreateNewArticle()
 
 function handleSave() {
-  const meta = {}
-
-  fields.value.forEach(([k, v]) => (meta[k] = v))
+  const meta = Object.fromEntries(fields.value)
+  // TODO Check this place
 
   createNewArticle({
     name: name.value,
@@ -62,7 +63,7 @@ function handleChange(index, key, val) {
 }
 
 function addField() {
-  fields.value = [...fields.value, []]
+  fields.value = [...fields.value, ['', '']]
 }
 
 function addImage() {
@@ -93,17 +94,41 @@ function format(type: string) {
 }
 </script>
 <template>
-  <div>
-    <button @click="handleSave">Save</button>
+  <div :class="$style.headerControls">
+    <v-btn variant="tonal" color="#5865f2" class="text-subtitle-1" @click="handleSave"
+      >Publish</v-btn
+    >
   </div>
-  <input :value="name" @input="(event) => (name = event.target.value)" />
+  <v-text-field
+    variant="underlined"
+    label="New Article Title"
+    :value="name"
+    @input="(event) => (name = event.target.value)"
+  />
   <h2>Meta</h2>
   <div :class="$style.inputs">
     <template v-for="([key, val], index) in fields" :key="index">
-      <input :value="key" @input="(event) => handleChange(index, event.target.value, val)" />
-      <input :value="val" @input="(event) => handleChange(index, key, event.target.value)" />
+      <div :class="$style.inputRow">
+        <v-text-field
+          density="compact"
+          variant="underlined"
+          label="Key"
+          :value="key"
+          @input="(event) => handleChange(index, event.target.value, val)"
+        />
+
+        <v-text-field
+          density="compact"
+          variant="underlined"
+          label="Value"
+          :value="val"
+          @input="(event) => handleChange(index, key, event.target.value)"
+        />
+      </div>
     </template>
-    <button @click="addField">New field</button>
+    <v-btn variant="tonal" density="comfortable" class="text-subtitle-1" @click="addField"
+      >Add field</v-btn
+    >
   </div>
   <h2>Content</h2>
   <div :class="$style.controls">
@@ -118,10 +143,9 @@ function format(type: string) {
 </template>
 
 <style module>
-.inputs {
-  display: grid;
-  grid-template-columns: 100px 500px;
-  grid-row-gap: 0.75em;
+.headerControls {
+  display: flex;
+  justify-content: flex-end;
 }
 
 .label {
@@ -133,6 +157,7 @@ function format(type: string) {
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 6px;
+  min-height: 200px;
 }
 
 .bold {
@@ -141,7 +166,23 @@ function format(type: string) {
 
 .controls {
   display: flex;
-  gap: 4px;
+  gap: 6px;
   padding: 10px 0;
+}
+
+.inputRow {
+  display: flex;
+  gap: 16px;
+  max-width: 600px;
+}
+</style>
+
+<style>
+.tiptap p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: #adb5bd;
+  pointer-events: none;
+  height: 0;
 }
 </style>
