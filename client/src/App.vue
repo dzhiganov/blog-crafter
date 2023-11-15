@@ -5,9 +5,6 @@ import { useGetUser } from '@/queries/get-user'
 
 const router = useRouter()
 const { data: user, isLoading } = useGetUser()
-const { bio, name, avatar_url } = user.value || {}
-
-console.log('user', user)
 
 router.beforeEach(async (to) => {
   const code = Cookies.get('github-access-token')
@@ -20,13 +17,16 @@ router.beforeEach(async (to) => {
 
 <template>
   <header>
-    <h1 :class="$style.logo">Blog Crafter</h1>
-    <div v-if="!isLoading">
-      <v-avatar color="grey" size="50" rounded="50%">
-        <v-img cover :src="avatar_url"></v-img>
+    <div>
+      <h1 :class="$style.logo">Blog Crafter</h1>
+    </div>
+    <div v-if="!isLoading" :class="$style.userInfo">
+      <v-avatar color="grey" size="30" rounded="50%">
+        <v-img cover :src="user.avatar_url"></v-img>
       </v-avatar>
-      {{ name }}
-      {{ bio }}
+      <div>
+        <span :class="$style.username"> {{ user.name }}</span>
+      </div>
     </div>
   </header>
   <main><RouterView /></main>
@@ -36,7 +36,12 @@ router.beforeEach(async (to) => {
 header {
   line-height: 1.5;
   max-height: 100vh;
-  padding: 2rem 2rem 2rem 2rem;
+  padding: 0.75rem;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #ccc;
+  align-items: center;
+  margin-bottom: 1rem;
 }
 
 main {
@@ -46,6 +51,16 @@ main {
 .logo {
   color: #5865f2;
   font-weight: 700;
-  font-size: 46px;
+  font-size: 22px;
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.username {
+  font-weight: 500;
 }
 </style>

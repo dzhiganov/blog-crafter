@@ -31,8 +31,9 @@ export default async function (
         },
       });
 
-      const { bio, name, avatar_url } = await responseContent.json();
+      const { bio, name, avatar_url, ...rest } = await responseContent.json();
 
+      console.log("user", rest);
       reply.send({
         bio,
         name,

@@ -16,7 +16,7 @@ const editor = useEditor({
 const fields = ref({})
 
 const { data: articleContent, isLoading } = useGetArticleContentQuery(
-  encodeURIComponent(String(route.params.id))
+  encodeURIComponent(String(route.params.articleId))
 )
 
 const { mutate: updateArticle } = useUpdateArticle()
