@@ -18,7 +18,9 @@ router.beforeEach(async (to) => {
 <template>
   <header>
     <div>
-      <h1 :class="$style.logo">Blog Crafter</h1>
+      <h1>
+        <router-link :class="$style.logo" to="/">Blog Crafter</router-link>
+      </h1>
     </div>
     <div v-if="!isLoading" :class="$style.userInfo">
       <v-avatar color="grey" size="30" rounded="50%">
@@ -45,7 +47,7 @@ header {
 }
 
 main {
-  padding: 0 2rem 0 2rem;
+  padding: 0 1rem 0 1rem;
 }
 
 .logo {

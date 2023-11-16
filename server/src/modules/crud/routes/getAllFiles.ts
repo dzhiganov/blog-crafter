@@ -3,15 +3,21 @@ import { FastifyInstance } from "fastify";
 import fetch from "node-fetch";
 import { getGetContentURL } from "../endpoints.js";
 
+type TQuerystring = {
+  user: string;
+  repo: string;
+  path: string;
+  branch?: string;
+};
+
 export default async function (fastify: FastifyInstance) {
-  fastify.get("/content", async (res, reply) => {
+  fastify.get<{
+    Querystring: TQuerystring;
+  }>("/content", async (res, reply) => {
     const token = res.headers[`x-github-token`];
+    const { user = "", repo = "", path = "", branch = "main" } = res.query;
     const responseContent = await fetch(
-      `${getGetContentURL(
-        "delawere",
-        "photography_blog",
-        "content/blog"
-      )}?ref=main`,
+      `${getGetContentURL(user, repo, path)}?ref=${branch}`,
       {
         method: "GET",
         headers: {
@@ -62,7 +68,7 @@ export default async function (fastify: FastifyInstance) {
         files.push(it);
       }
     }
-    console.log("Items", files);
+
     const items = files.map(({ download_url, name, parent, sha }) => {
       return {
         download_url,

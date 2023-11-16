@@ -13,10 +13,12 @@ import {
 } from "./endpoints.js";
 
 export class Articles {
-  accessToken = "";
+  accessToken: string;
+  user: string;
 
-  constructor(accessToken: string) {
+  constructor({ accessToken, user }: { accessToken: string; user: string }) {
     this.accessToken = accessToken;
+    this.user = user;
   }
 
   getDefaultHeaders() {
@@ -34,9 +36,6 @@ export class Articles {
       });
 
       const refData = await response.json();
-
-      console.log("headers", this.getDefaultHeaders());
-      console.log("ref", refData);
 
       const commitSha = refData.object.sha;
 
@@ -151,19 +150,17 @@ export class Articles {
     repo: any,
     branch: any
   ) {
-    const currentCommit = await this.getCurrentCommit("delawere", repo, branch);
+    const currentCommit = await this.getCurrentCommit(this.user, repo, branch);
     const filesPaths = await globby(pathToFile);
     const filesBlobs = await Promise.all(
-      filesPaths.map(this.createBlobForFile("delawere", repo))
+      filesPaths.map(this.createBlobForFile(this.user, repo))
     );
     const pathsForBlobs = filesPaths.map((fullPath: any) => {
       return path.relative(pathToFile, fullPath);
     });
 
-    console.log(filesBlobs, pathsForBlobs);
-
     const newTree = await this.createNewTree(
-      "delawere",
+      this.user,
       repo,
       filesBlobs,
       pathsForBlobs,
@@ -171,7 +168,7 @@ export class Articles {
       pathInRepo
     );
     const newCommit = await this.createNewCommit(
-      "delawere",
+      this.user,
       repo,
       "test",
       newTree.sha,

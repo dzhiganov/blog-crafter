@@ -31,10 +31,10 @@ export default async function (
         },
       });
 
-      const { bio, name, avatar_url, ...rest } = await responseContent.json();
+      const { bio, login, name, avatar_url } = await responseContent.json();
 
-      console.log("user", rest);
       reply.send({
+        login,
         bio,
         name,
         avatar_url,

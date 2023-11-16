@@ -20,3 +20,6 @@ export const getCreateCommitURL = (owner: string, repo: string) =>
 
 export const getGetContentURL = (owner: string, repo: string, path: string) =>
   `${GIT_HUB_API_URL}/repos/${owner}/${repo}/contents/${path}`;
+
+export const getGetReposURL = (owner: string) =>
+  `${GIT_HUB_API_URL}/users/${owner}/repos`;

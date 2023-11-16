@@ -3,17 +3,21 @@ import axios from 'axios'
 import { SERVER_URL } from './constants'
 import Cookie from 'js-cookie'
 
-export function useGetArticlesQuery(): ReturnType<typeof useQuery> {
+export function useGetArticlesQuery({ user, path, repo, branch }): ReturnType<typeof useQuery> {
   return useQuery({
-    queryKey: ['getArticles'],
-    queryFn: async () => {
-      const contentResponse = await axios.get(`${SERVER_URL}/content`, {
-        headers: {
-          [`x-github-token`]: `${Cookie.get('github-access-token')}`
+    queryKey: ['getArticles', user, path, repo, branch],
+    queryFn: async ({ queryKey }) => {
+      const contentResponse = await axios.get(
+        `${SERVER_URL}/content?user=${queryKey[1]}&path=${queryKey[2]}&repo=${queryKey[3]}&branch=${queryKey[4]}`,
+        {
+          headers: {
+            [`x-github-token`]: `${Cookie.get('github-access-token')}`
+          }
         }
-      })
+      )
       return contentResponse.data.items
-    }
+    },
+    enabled: false
   })
 }
 

@@ -17,7 +17,6 @@ const openAuth = () => {
 }
 
 watch(accessToken, () => {
-  console.log('accessToken.value', accessToken.value)
   Cookies.set('github-access-token', String(accessToken.value), { secure: true })
   router.replace('/dashboard')
 })

@@ -4,42 +4,52 @@ import { getGetContentURL } from "../endpoints.js";
 import { GIT_HUB_API_HEADERS } from "../constants.js";
 import { marked } from "marked";
 
+type TQuerystring = {
+  user: string;
+  repo: string;
+  branch?: string;
+};
+
 export default async function (
   fastify: FastifyInstance,
   opts: FastifyServerOptions
 ) {
-  fastify.get("/content/:path", async (res, reply) => {
-    const { path } = res.params as any;
-    const token = res.headers[`x-github-token`];
+  fastify.get<{ Querystring: TQuerystring }>(
+    "/content/:path",
+    async (req, reply) => {
+      const { path } = req.params as any;
+      const { user = "", repo = "", branch = "main" } = req.query;
+      const token = req.headers[`x-github-token`];
 
-    const responseContent = await fetch(
-      getGetContentURL("delawere", "photography_blog", path) + "?ref=main",
-      {
-        method: "GET",
-        headers: {
-          ...GIT_HUB_API_HEADERS,
-          Authorization: `Bearer ${token}`,
-        },
+      const responseContent = await fetch(
+        getGetContentURL(user, repo, path) + `?ref=${branch}`,
+        {
+          method: "GET",
+          headers: {
+            ...GIT_HUB_API_HEADERS,
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const [data] = (await responseContent.json()) || [];
+
+      if (!data) {
+        reply.code(404).send({
+          message: "Article was not found",
+        });
+      } else {
+        const { download_url } = data;
+        const contentResponse = await fetch(download_url, {
+          headers: {
+            ["Content-Type"]: "text/markdown; charset=UTF-8",
+          },
+        });
+        const md = await contentResponse.text();
+        reply.code(200).send(toObject(md));
       }
-    );
-
-    const [data] = (await responseContent.json()) || [];
-
-    if (!data) {
-      reply.code(404).send({
-        message: "Article was not found",
-      });
-    } else {
-      const { download_url } = data;
-      const contentResponse = await fetch(download_url, {
-        headers: {
-          ["Content-Type"]: "text/markdown; charset=UTF-8",
-        },
-      });
-      const md = await contentResponse.text();
-      reply.code(200).send(toObject(md));
     }
-  });
+  );
 }
 
 function toObject(text: string) {

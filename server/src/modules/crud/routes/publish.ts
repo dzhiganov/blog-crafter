@@ -12,6 +12,10 @@ type PublishRequestBody = {
   path: string;
   meta: Record<string, string>;
   content: string;
+  user: string;
+  repo: string;
+  branch?: string;
+  pathToContent: string;
 };
 
 export default async function (
@@ -21,7 +25,14 @@ export default async function (
   fastify.put<{ Body: PublishRequestBody; Reply: any }>(
     "/publish",
     async function handler(req, reply) {
-      const { path: pathInRepo = "", meta = {}, content = "" } = req.body;
+      const {
+        path: pathInRepo = "",
+        meta = {},
+        content = "",
+        user = "",
+        repo = "",
+        branch = "main",
+      } = req.body;
       const token = req.headers[`x-github-token`];
 
       let md = NodeHtmlMarkdown.translate(content);
@@ -32,14 +43,17 @@ export default async function (
       }
 
       md = `${metaText}---\n${md}`;
-      const REPO = "photography_blog";
-      const BRANCH = "main";
+      const REPO = repo;
+      const BRANCH = branch;
       const __filename = fileURLToPath(import.meta.url);
       const __dirname = dirname(__filename);
       const workspacePath = path.join(__dirname, "../../..", "md");
 
       const fullPathToFile = path.join(workspacePath, "test.md");
-      const articlesCRUD = new Articles(String(token));
+      const articlesCRUD = new Articles({
+        accessToken: String(token),
+        user,
+      });
 
       try {
         await fs.writeFile(fullPathToFile, md);
@@ -60,12 +74,24 @@ export default async function (
     name: string;
     meta: Record<string, string>;
     content: string;
+    user: string;
+    repo: string;
+    branch?: string;
+    pathToContent: string;
   };
 
   fastify.post<{ Body: CreateNewArticleRequestBody; Reply: any }>(
     "/publish",
     async (req, res) => {
-      const { name = "", meta = {}, content = "" } = req.body;
+      const {
+        name = "",
+        meta = {},
+        content = "",
+        user = "",
+        repo = "",
+        branch = "main",
+        pathToContent = "",
+      } = req.body;
       const token = req.headers[`x-github-token`];
 
       let md = NodeHtmlMarkdown.translate(content);
@@ -76,15 +102,18 @@ export default async function (
       }
 
       md = `${metaText}---\n${md}`;
-      const REPO = "photography_blog";
-      const BRANCH = "main";
+      const REPO = repo;
+      const BRANCH = branch;
       const __filename = fileURLToPath(import.meta.url);
       const __dirname = dirname(__filename);
       const workspacePath = path.join(__dirname, "../../..", "md");
-      const pathInRepo = `content/blog/${name}`;
+      const pathInRepo = `${pathToContent}/${name}`;
 
       const fullPathToFile = path.join(workspacePath, "test.md");
-      const articlesCRUD = new Articles(String(token));
+      const articlesCRUD = new Articles({
+        accessToken: String(token),
+        user,
+      });
 
       try {
         await fs.writeFile(fullPathToFile, md);
