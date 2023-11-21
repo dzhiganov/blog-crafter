@@ -3,7 +3,19 @@ import axios from 'axios'
 import { SERVER_URL } from './constants'
 import Cookie from 'js-cookie'
 
-export function useGetArticlesQuery({ user, path, repo, branch }): ReturnType<typeof useQuery> {
+type GetArticlesParams = {
+  user: string
+  path: string
+  repo: string
+  branch?: string
+}
+
+export function useGetArticlesQuery({
+  user,
+  path,
+  repo,
+  branch = ''
+}: GetArticlesParams): ReturnType<typeof useQuery> {
   return useQuery({
     queryKey: ['getArticles', user, path, repo, branch],
     queryFn: async ({ queryKey }) => {
@@ -23,13 +35,16 @@ export function useGetArticlesQuery({ user, path, repo, branch }): ReturnType<ty
 
 export function useUpdateArticle(): ReturnType<typeof useMutation> {
   return useMutation<any, any, any>({
-    mutationFn: async ({ path, meta, content }) => {
+    mutationFn: async ({ path, meta, content, user, repo, branch }) => {
       const contentResponse = await axios.put(
         `${SERVER_URL}/publish`,
         {
           path,
           meta,
-          content
+          content,
+          user,
+          repo,
+          branch
         },
         {
           headers: {
@@ -44,14 +59,17 @@ export function useUpdateArticle(): ReturnType<typeof useMutation> {
 
 export function useCreateNewArticle(): ReturnType<typeof useMutation> {
   return useMutation<any, any, any, any>({
-    mutationFn: async ({ name, path, meta, content }) => {
+    mutationFn: async ({ name, path, meta, content, user, repo, branch }) => {
       const contentResponse = await axios.post(
         `${SERVER_URL}/publish`,
         {
           name,
           path,
           meta,
-          content
+          content,
+          user,
+          repo,
+          branch
         },
         {
           headers: {

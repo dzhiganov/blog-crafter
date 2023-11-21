@@ -1,79 +1,66 @@
 <script lang="ts" setup>
-import { ref, watch } from 'vue'
-import { marked } from 'marked'
-import { useEditor, EditorContent } from '@tiptap/vue-3'
-import StarterKit from '@tiptap/starter-kit'
-import Image from '@tiptap/extension-image'
+import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useGetArticleContentQuery } from '@/queries/article-content'
 import { useUpdateArticle } from '@/queries/articles'
+import { useGetUser } from '@/queries/get-user'
+import EditorItem from '@/components/EditorItem.vue'
+import { getFromStorage } from '@/utils/persistentStorage'
 
-const route = useRoute()
-const editor = useEditor({
-  content: '',
-  extensions: [StarterKit, Image.configure({ inline: true })]
-})
+const {
+  params: { articleId, projectId }
+} = useRoute()
 const fields = ref({})
+const { data: user } = useGetUser()
 
-const { data: articleContent, isLoading } = useGetArticleContentQuery(
-  encodeURIComponent(String(route.params.articleId))
+const userLogin = computed(() => user.value?.login)
+const enabled = computed(() => !!user.value?.login)
+const editorComponent = ref<{ getHtml: () => string }>({ getHtml: () => '' })
+const metaFieldsComponent = ref<{ getMetaData: () => Record<string, string> }>({
+  getMetaData: () => ({})
+})
+
+const {
+  data: articleContent,
+  isLoading,
+  isFetching
+} = useGetArticleContentQuery(
+  {
+    user: userLogin,
+    repo: String(projectId),
+    branch: 'main',
+    path: encodeURIComponent(String(articleId))
+  },
+  enabled
 )
 
 const { mutate: updateArticle } = useUpdateArticle()
 
-watch(articleContent, () => {
-  if (articleContent.value) {
-    const html = marked.parse(articleContent.value.content)
-
-    editor.value?.commands.setContent(html)
-    fields.value = articleContent.value.meta
-  }
-})
-
 function handleSave() {
   updateArticle({
-    path: route.params.id,
+    path: String(articleId),
     meta: fields.value,
-    content: editor.value?.getHTML()
+    content: editorComponent.value?.getHtml(),
+    user: userLogin.value,
+    branch: getFromStorage(`${projectId}:branch`),
+    repo: String(projectId)
   })
-}
-
-function handleChange(key, val) {
-  fields.value = {
-    ...fields.value,
-    [key]: val
-  }
 }
 </script>
 <template>
   <div>
     <v-btn variant="tonal" color="#5865f2" class="text-subtitle-1" @click="handleSave">Save</v-btn>
   </div>
-  <v-skeleton-loader width="500" v-if="isLoading" type="article"></v-skeleton-loader>
-  <div v-if="!isLoading">
+  <v-skeleton-loader width="500" v-if="isLoading || isFetching" type="article"></v-skeleton-loader>
+  <div v-if="!isLoading || isFetching">
     <h2>Meta</h2>
-    <div :class="$style.inputs">
-      <template v-for="[key, val] in Object.entries(fields)" :key="key">
-        <label :for="key" :class="$style.label">{{ key }}</label>
-        <input :id="key" :value="val" @input="(event) => handleChange(key, event.target.value)" />
-      </template>
-    </div>
-    <v-btn variant="tonal" density="comfortable" class="text-subtitle-1">Add field</v-btn>
+    <MetaFields ref="metaFieldsComponent" />
   </div>
 
-  <h2 v-if="!isLoading">Content</h2>
-  <editor-content :editor="editor" />
+  <h2 v-if="!isLoading || !isFetching">Content</h2>
+  <EditorItem
+    v-if="!isLoading && !isFetching"
+    ref="editorComponent"
+    :initial-content="articleContent?.md ?? ''"
+  />
 </template>
-
-<style module>
-.inputs {
-  display: grid;
-  grid-template-columns: 100px 500px;
-  grid-row-gap: 0.75em;
-}
-
-.label {
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-</style>

@@ -4,20 +4,24 @@ import { useRoute, useRouter } from 'vue-router'
 import { useGetRepos } from '@/queries/get-repos'
 import { useGetArticlesQuery } from '@/queries/articles'
 import { useGetUser } from '@/queries/get-user'
+import { getFromStorage, setIntoStorage } from '@/utils/persistentStorage'
 
 const { data: user, isLoading: isUserLoading } = useGetUser()
 const userLogin = computed(() => user.value?.login)
 const enabled = computed(() => !!user.value?.login)
 const { data: repos, isFetching, isLoading } = useGetRepos({ user: userLogin }, enabled.value)
-
-const initialValues = {
-  pathToContent: localStorage.getItem('pathToContent') || '',
-  branch: localStorage.getItem('branch') || 'main'
-}
-const pathToContent = ref(initialValues.pathToContent)
-const branch = ref(initialValues.branch)
 const route = useRoute()
 const projectId = route.params.projectId
+
+const initialValues = {
+  pathToContent: getFromStorage(`${projectId}:path-to-content`, ''),
+  branch: getFromStorage(`${projectId}:branch`, 'main')
+}
+
+console.log('initialValues', initialValues)
+
+const pathToContent = ref(initialValues.pathToContent)
+const branch = ref(initialValues.branch)
 
 const localState = ref({
   branch: initialValues.branch,
@@ -53,9 +57,8 @@ watch(userLogin, () => {
 })
 
 const saveSettings = () => {
-  // TODO Save settings to the database
-  localStorage.setItem('pathToContent', pathToContent.value)
-  localStorage.setItem('branch', branch.value)
+  setIntoStorage(`${projectId}:path-to-content`, pathToContent.value)
+  setIntoStorage(`${projectId}:branch`, branch.value)
 
   localState.value = {
     pathToContent: pathToContent.value,

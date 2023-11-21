@@ -1,17 +1,24 @@
 <script setup lang="ts">
 defineProps({
-  iconName: String,
-  handleClick: Function
+  iconName: String
 })
+
+const emits = defineEmits({
+  click: Function
+})
+
+function handleClick() {
+  emits('click')
+}
 </script>
 <template>
   <button class="button" @click="handleClick">
-    <template v-if="iconName === 'bold'"><v-icon icon="format_bold" /></template>
-    <template v-if="iconName === 'italic'"><v-icon icon="format_italic" /></template>
-    <template v-if="iconName === 'h1'"><span class="btn-title__bold">H1</span></template>
-    <template v-if="iconName === 'h2'"><span class="btn-title__bold">H2</span></template>
-    <template v-if="iconName === 'h3'"><span class="btn-title__bold">H3</span></template>
-    <template v-if="iconName === 'image'"><v-icon icon="image" /></template>
+    <v-icon v-if="iconName === 'bold'" icon="format_bold" />
+    <v-icon v-if="iconName === 'italic'" icon="format_italic" />
+    <span v-if="iconName === 'h1'" class="btn-title__bold">H1</span>
+    <span v-if="iconName === 'h2'" class="btn-title__bold">H2</span>
+    <span v-if="iconName === 'h3'" class="btn-title__bold">H3</span>
+    <v-icon v-if="iconName === 'image'" icon="image" />
   </button>
 </template>
 

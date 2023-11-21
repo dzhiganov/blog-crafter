@@ -1,11 +1,8 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
 import { useGetRepos } from '@/queries/get-repos'
 import { useGetUser } from '@/queries/get-user'
 import { computed } from 'vue'
-
-const router = useRouter()
-const { data: user, isLoading: isUserLoading } = useGetUser()
+const { data: user } = useGetUser()
 
 const userLogin = computed(() => user.value?.login)
 const enabled = computed(() => Boolean(user.value?.login))

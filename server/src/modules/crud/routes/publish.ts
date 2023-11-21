@@ -77,7 +77,7 @@ export default async function (
     user: string;
     repo: string;
     branch?: string;
-    pathToContent: string;
+    path: string;
   };
 
   fastify.post<{ Body: CreateNewArticleRequestBody; Reply: any }>(
@@ -90,7 +90,7 @@ export default async function (
         user = "",
         repo = "",
         branch = "main",
-        pathToContent = "",
+        path: pathToContent = "",
       } = req.body;
       const token = req.headers[`x-github-token`];
 

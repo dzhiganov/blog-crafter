@@ -3,8 +3,12 @@ import axios from 'axios'
 import { SERVER_URL } from './constants'
 import Cookie from 'js-cookie'
 
-export function useGetUser(): ReturnType<typeof useQuery> {
-  return useQuery<any, any, any, any>({
+type GetUserResponse = {
+  login: string
+}
+
+export function useGetUser(): ReturnType<typeof useQuery<GetUserResponse>> {
+  return useQuery({
     queryKey: ['getUser'],
     queryFn: async () => {
       const { data } = await axios.get(`${SERVER_URL}/user`, {
