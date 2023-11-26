@@ -20,23 +20,16 @@ function addField() {
 </script>
 <template>
   <div :class="$style.inputs">
-    <template v-for="(_t, index) in fields" :key="index">
-      <div :class="$style.inputRow">
-        <v-text-field
-          density="compact"
-          variant="underlined"
-          label="Key"
-          v-model="fields[index][0]"
-        />
+    <div v-for="(_t, index) in fields" :class="$style.inputRow" :key="index">
+      <v-text-field density="compact" variant="underlined" label="Key" v-model="fields[index][0]" />
 
-        <v-text-field
-          density="compact"
-          variant="underlined"
-          label="Value"
-          v-model="fields[index][1]"
-        />
-      </div>
-    </template>
+      <v-text-field
+        density="compact"
+        variant="underlined"
+        label="Value"
+        v-model="fields[index][1]"
+      />
+    </div>
     <v-btn variant="tonal" density="comfortable" class="text-subtitle-1" @click="addField"
       >Add field</v-btn
     >

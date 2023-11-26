@@ -1,10 +1,18 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import Cookies from 'js-cookie'
-import { useGetUser } from '@/queries/get-user'
+import { ref, provide } from 'vue'
 
 const router = useRouter()
-const { data: user, isLoading } = useGetUser()
+const notificationMessage = ref('')
+const notificationIsOpen = ref(false)
+
+const showNotification = (message: string) => {
+  notificationMessage.value = message
+  notificationIsOpen.value = true
+}
+
+provide('showNotification', showNotification)
 
 router.beforeEach(async (to) => {
   const code = Cookies.get('github-access-token')
@@ -13,56 +21,24 @@ router.beforeEach(async (to) => {
     return { name: 'Login' }
   }
 })
+
+const closeNotification = () => {
+  notificationMessage.value = ''
+  notificationIsOpen.value = false
+}
 </script>
 
 <template>
-  <header>
-    <div>
-      <h1>
-        <router-link :class="$style.logo" to="/">Blog Crafter</router-link>
-      </h1>
-    </div>
-    <div v-if="!isLoading" :class="$style.userInfo">
-      <v-avatar color="grey" size="30" rounded="50%">
-        <v-img cover :src="user.avatar_url"></v-img>
-      </v-avatar>
-      <div>
-        <span :class="$style.username"> {{ user.name }}</span>
-      </div>
-    </div>
-  </header>
-  <main><RouterView /></main>
+  <v-app>
+    <RouterView />
+
+    <v-snackbar v-model="notificationIsOpen" :timeout="5000" color="white">
+      {{ notificationMessage }}
+      <template v-slot:actions>
+        <v-btn variant="text" @click="closeNotification">
+          <v-icon icon="close" />
+        </v-btn>
+      </template>
+    </v-snackbar>
+  </v-app>
 </template>
-
-<style module>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-  padding: 0.75rem;
-  display: flex;
-  justify-content: space-between;
-  border-bottom: 1px solid #ccc;
-  align-items: center;
-  margin-bottom: 1rem;
-}
-
-main {
-  padding: 0 1rem 0 1rem;
-}
-
-.logo {
-  color: #5865f2;
-  font-weight: 700;
-  font-size: 22px;
-}
-
-.userInfo {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.username {
-  font-weight: 500;
-}
-</style>

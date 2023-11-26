@@ -33,7 +33,13 @@ export function useGetArticlesQuery({
   })
 }
 
-export function useUpdateArticle(): ReturnType<typeof useMutation> {
+export function useUpdateArticle({
+  onSuccess,
+  onError
+}: {
+  onSuccess: (data: unknown) => unknown
+  onError: (error: unknown) => unknown
+}): ReturnType<typeof useMutation> {
   return useMutation<any, any, any>({
     mutationFn: async ({ path, meta, content, user, repo, branch }) => {
       const contentResponse = await axios.put(
@@ -52,12 +58,21 @@ export function useUpdateArticle(): ReturnType<typeof useMutation> {
           }
         }
       )
+
       return contentResponse.data
-    }
+    },
+    onSuccess,
+    onError
   })
 }
 
-export function useCreateNewArticle(): ReturnType<typeof useMutation> {
+export function useCreateNewArticle({
+  onSuccess,
+  onError
+}: {
+  onSuccess: (data: unknown) => unknown
+  onError: (error: unknown) => unknown
+}): ReturnType<typeof useMutation> {
   return useMutation<any, any, any, any>({
     mutationFn: async ({ name, path, meta, content, user, repo, branch }) => {
       const contentResponse = await axios.post(
@@ -78,6 +93,8 @@ export function useCreateNewArticle(): ReturnType<typeof useMutation> {
         }
       )
       return contentResponse.data
-    }
+    },
+    onSuccess,
+    onError
   })
 }

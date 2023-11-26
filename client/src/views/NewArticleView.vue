@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
+import { computed, inject, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useCreateNewArticle } from '@/queries/articles'
 import { useGetUser } from '@/queries/get-user'
@@ -20,8 +20,12 @@ const {
 } = route
 
 const name = ref('')
+const showNotification = inject<(message: string) => void>('showNotification')
 
-const { mutate: createNewArticle } = useCreateNewArticle()
+const { mutate: createNewArticle } = useCreateNewArticle({
+  onSuccess: () => showNotification?.('Article was saved successfully'),
+  onError: () => showNotification?.('Error while saving article')
+})
 
 function handleSave() {
   createNewArticle({

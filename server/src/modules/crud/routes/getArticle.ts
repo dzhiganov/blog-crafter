@@ -75,7 +75,6 @@ function toObject(text: string) {
   }
 
   function getMarkdownContent(data: string) {
-    console.log("data", data);
     const strReg = "^ *?\\" + start + "[^]*?" + end + "*";
     const reg = new RegExp(strReg);
     const content = data.replace(reg, "");

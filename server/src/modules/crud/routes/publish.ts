@@ -36,7 +36,7 @@ export default async function (
       const token = req.headers[`x-github-token`];
 
       let md = NodeHtmlMarkdown.translate(content);
-      let metaText = "---\n ";
+      let metaText = "---\n";
 
       for (let [k, v] of Object.entries(meta)) {
         metaText += `${k}: ${v}\n`;
@@ -102,6 +102,10 @@ export default async function (
       }
 
       md = `${metaText}---\n${md}`;
+
+      console.log("md", md);
+
+      return;
       const REPO = repo;
       const BRANCH = branch;
       const __filename = fileURLToPath(import.meta.url);

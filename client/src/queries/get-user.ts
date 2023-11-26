@@ -5,6 +5,8 @@ import Cookie from 'js-cookie'
 
 type GetUserResponse = {
   login: string
+  avatar_url: string
+  name: string
 }
 
 export function useGetUser(): ReturnType<typeof useQuery<GetUserResponse>> {

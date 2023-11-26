@@ -18,8 +18,6 @@ const initialValues = {
   branch: getFromStorage(`${projectId}:branch`, 'main')
 }
 
-console.log('initialValues', initialValues)
-
 const pathToContent = ref(initialValues.pathToContent)
 const branch = ref(initialValues.branch)
 

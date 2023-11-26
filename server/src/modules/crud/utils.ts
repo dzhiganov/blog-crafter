@@ -98,8 +98,6 @@ export class Articles {
       };
     });
 
-    console.log("inside tree", parentTreeSha, tree);
-
     const responseTree = await fetch(getCreateTreeURL(owner, repo), {
       method: "POST",
       headers: this.getDefaultHeaders(),
@@ -169,7 +167,6 @@ export class Articles {
       currentCommit.treeSha,
       pathInRepo
     );
-    console.log("new tree", newTree);
     const newCommit = await this.createNewCommit(
       this.user,
       repo,
@@ -177,7 +174,7 @@ export class Articles {
       newTree.sha,
       currentCommit.commitSha
     );
-    console.log("we are here", this.user, repo, branch, newCommit);
+
     this.setBranchToCommit(this.user, repo, branch, newCommit.sha);
   }
 }
