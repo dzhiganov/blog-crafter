@@ -8,11 +8,11 @@ import { getFromStorage, setIntoStorage } from '@/utils/persistentStorage'
 import LayoutItem from '@/components/LayoutItem.vue'
 
 const { data: user } = useGetUser()
-const userLogin = computed(() => user.value?.login)
+const userLogin = computed(() => user.value?.login || '')
 const enabled = computed(() => !!user.value?.login)
 const { data: repos } = useGetRepos({ user: userLogin }, enabled.value)
 const route = useRoute()
-const projectId = route.params.projectId
+const projectId = route.params.projectId || ''
 
 const initialValues = {
   pathToContent: getFromStorage(`${projectId}:path-to-content`, ''),
@@ -27,8 +27,8 @@ const localState = ref({
   pathToContent: initialValues.pathToContent
 })
 
-const pathToContentValue = computed(() => localState.value?.pathToContent)
-const branchValue = computed(() => localState.value?.branch)
+const pathToContentValue = computed(() => localState.value?.pathToContent || '')
+const branchValue = computed(() => localState.value?.branch || '')
 
 const {
   data: articles,
@@ -37,7 +37,7 @@ const {
 } = useGetArticlesQuery({
   user: userLogin,
   path: pathToContentValue,
-  repo: projectId,
+  repo: String(projectId),
   branch: branchValue
 })
 
@@ -113,9 +113,9 @@ const isDirty = computed(() => {
         type="list-item-three-line"
       ></v-skeleton-loader>
       <v-list v-else>
-        <v-list-item v-for="{ parent } in articles" :key="parent" class="pl-0">
+        <v-list-item v-for="{ parent = '' } in articles" :key="parent" class="pl-0">
           <router-link :to="`/projects/${projectId}/articles/${encodeURIComponent(parent)}`">
-            {{ parent.split('/').at(-1) }}</router-link
+            {{ parent.split('/')[parent.split('/').length - 1] }}</router-link
           >
         </v-list-item>
       </v-list>

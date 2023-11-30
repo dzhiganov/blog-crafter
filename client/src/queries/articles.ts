@@ -7,7 +7,7 @@ import type { ComputedRef } from 'vue'
 type GetArticlesParams = {
   user: ComputedRef<string>
   path: ComputedRef<string>
-  repo: ComputedRef<string>
+  repo: string
   branch?: ComputedRef<string>
 }
 
