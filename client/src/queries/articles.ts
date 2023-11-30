@@ -2,19 +2,20 @@ import { useQuery, useMutation } from '@tanstack/vue-query'
 import axios from 'axios'
 import { SERVER_URL } from './constants'
 import Cookie from 'js-cookie'
+import type { ComputedRef } from 'vue'
 
 type GetArticlesParams = {
-  user: string
-  path: string
-  repo: string
-  branch?: string
+  user: ComputedRef<string>
+  path: ComputedRef<string>
+  repo: ComputedRef<string>
+  branch?: ComputedRef<string>
 }
 
 export function useGetArticlesQuery({
   user,
   path,
   repo,
-  branch = ''
+  branch
 }: GetArticlesParams): ReturnType<typeof useQuery> {
   return useQuery({
     queryKey: ['getArticles', user, path, repo, branch],

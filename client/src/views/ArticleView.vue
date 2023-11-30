@@ -7,6 +7,7 @@ import { useGetUser } from '@/queries/get-user'
 import EditorItem from '@/components/EditorItem.vue'
 import { getFromStorage } from '@/utils/persistentStorage'
 import MetaFields from '@/components/MetaFields.vue'
+import LayoutItem from '@/components/LayoutItem.vue'
 
 const {
   params: { articleId, projectId }
@@ -52,34 +53,36 @@ function handleSave() {
 }
 </script>
 <template>
-  <div :class="$style.wrapper">
-    <div class="d-flex justify-end">
-      <v-btn
-        variant="tonal"
-        color="#5865f2"
-        class="text-subtitle-1"
-        @click="handleSave"
-        size="large"
-        >Save</v-btn
-      >
-    </div>
-    <v-skeleton-loader
-      width="500"
-      v-if="isLoading || isFetching"
-      type="article"
-    ></v-skeleton-loader>
-    <div v-if="!isLoading || isFetching">
-      <h2>Meta</h2>
-      <MetaFields ref="metaFieldsComponent" />
-    </div>
+  <LayoutItem>
+    <div :class="$style.wrapper">
+      <div class="d-flex justify-end">
+        <v-btn
+          variant="tonal"
+          color="#5865f2"
+          class="text-subtitle-1"
+          @click="handleSave"
+          size="large"
+          >Save</v-btn
+        >
+      </div>
+      <v-skeleton-loader
+        width="500"
+        v-if="isLoading || isFetching"
+        type="article"
+      ></v-skeleton-loader>
+      <div v-if="!isLoading || isFetching">
+        <h2>Meta</h2>
+        <MetaFields ref="metaFieldsComponent" />
+      </div>
 
-    <h2 v-if="!isLoading || !isFetching">Content</h2>
-    <EditorItem
-      v-if="!isLoading && !isFetching"
-      ref="editorComponent"
-      :initial-content="articleContent?.md ?? ''"
-    />
-  </div>
+      <h2 v-if="!isLoading || !isFetching">Content</h2>
+      <EditorItem
+        v-if="!isLoading && !isFetching"
+        ref="editorComponent"
+        :initial-content="articleContent?.md ?? ''"
+      />
+    </div>
+  </LayoutItem>
 </template>
 <style module>
 .wrapper {

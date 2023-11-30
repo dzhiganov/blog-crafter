@@ -1,4 +1,4 @@
-export const getFromStorage = (key: string, defaultValue = null) => {
+export const getFromStorage = (key: string, defaultValue: string | null = null) => {
   const val = localStorage.getItem(key)
 
   return val ?? defaultValue

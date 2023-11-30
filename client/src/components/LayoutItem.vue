@@ -19,7 +19,7 @@ const handleLogout = () => {
 <template>
   <header>
     <h1 :class="$style.logo">🛠️ Blog Crafter</h1>
-    <v-container>
+    <div>
       <v-row justify="end">
         <v-menu min-width="200px" rounded>
           <template v-slot:activator="{ props }">
@@ -38,7 +38,7 @@ const handleLogout = () => {
           </v-card>
         </v-menu>
       </v-row>
-    </v-container>
+    </div>
   </header>
   <main>
     <slot></slot>
@@ -51,7 +51,7 @@ const handleLogout = () => {
 header {
   line-height: 1.5;
   height: 60px;
-  padding: 0.75rem;
+  padding: 1em 3em 1em 1em;
   display: flex;
   justify-content: space-between;
   border-bottom: 1px solid #ccc;

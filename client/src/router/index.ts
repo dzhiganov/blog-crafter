@@ -16,23 +16,19 @@ const router = createRouter({
     {
       path: '/projects',
       name: 'Projects',
-      component: ProjectsView,
-      children: [
-        {
-          path: '/projects/:projectId',
-          component: ProjectsOverviewView,
-          children: [
-            {
-              path: '/projects/:projectId/articles/new',
-              component: NewArticleView
-            },
-            {
-              path: '/projects/:projectId/articles/:articleId',
-              component: ArticleView
-            }
-          ]
-        }
-      ]
+      component: ProjectsView
+    },
+    {
+      path: '/projects/:projectId',
+      component: ProjectsOverviewView
+    },
+    {
+      path: '/projects/:projectId/articles/new',
+      component: NewArticleView
+    },
+    {
+      path: '/projects/:projectId/articles/:articleId',
+      component: ArticleView
     }
   ]
 })

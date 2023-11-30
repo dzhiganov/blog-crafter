@@ -6,6 +6,7 @@ import { useGetUser } from '@/queries/get-user'
 import { getFromStorage } from '@/utils/persistentStorage'
 import EditorItem from '@/components/EditorItem.vue'
 import MetaFields from '@/components/MetaFields.vue'
+import LayoutItem from '@/components/LayoutItem.vue'
 
 const { data: user } = useGetUser()
 const userLogin = computed(() => user.value?.login)
@@ -40,16 +41,18 @@ function handleSave() {
 }
 </script>
 <template>
-  <div :class="$style.headerControls">
-    <v-btn variant="tonal" color="#5865f2" class="text-subtitle-1" @click="handleSave"
-      >Publish</v-btn
-    >
-  </div>
-  <v-text-field variant="underlined" label="New Article Title" v-model="name" />
-  <h2>Meta</h2>
-  <MetaFields ref="metaFieldsComponent" />
-  <h2>Content</h2>
-  <EditorItem ref="editorComponent" />
+  <LayoutItem>
+    <div :class="$style.headerControls">
+      <v-btn variant="tonal" color="#5865f2" class="text-subtitle-1" @click="handleSave"
+        >Publish</v-btn
+      >
+    </div>
+    <v-text-field variant="underlined" label="New Article Title" v-model="name" />
+    <h2>Meta</h2>
+    <MetaFields ref="metaFieldsComponent" />
+    <h2>Content</h2>
+    <EditorItem ref="editorComponent" />
+  </LayoutItem>
 </template>
 
 <style module>
