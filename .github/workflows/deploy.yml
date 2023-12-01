@@ -1,0 +1,34 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
+          chmod 700 ~/.ssh
+          chmod 600 ~/.ssh/deploy_key
+          echo "$SSH_KNOWN_HOSTS" >> ~/.ssh/known_hosts
+        env:
+          SSH_PRIVATE_KEY: ${{ vars.SSH_PRIVATE_KEY }}
+          SSH_KNOWN_HOSTS: ${{ vars.SSH_KNOWN_HOSTS }}
+      - name: Copy files to the server
+        run: |
+          rsync -a --progress --human-readable --delete \
+          --exclude-from '.gitignore' \
+          --exclude .gitignore \
+          --exclude .git \
+          --exclude public \
+          . deploy@ec2-16-170-230-203.eu-north-1.compute.amazonaws.com:~/blog-crafter/
+      # job для перезапуска приложения при помощи pm2
+      - name: Restart the application
+        run: |
+          ssh deploy@ec2-16-170-230-203.eu-north-1.compute.amazonaws.com "pushd ~/blog-crafter && npm install && popd && pm2 restart ecosystem.config.js"
