@@ -17,6 +17,7 @@ jobs:
           chmod 700 ~/.ssh
           chmod 600 ~/.ssh/deploy_key
           echo "$SSH_KNOWN_HOSTS" >> ~/.ssh/known_hosts
+          echo $SSH_PRIVATE_KEY
         env:
           SSH_PRIVATE_KEY: ${{ vars.SSH_PRIVATE_KEY }}
           SSH_KNOWN_HOSTS: ${{ vars.SSH_KNOWN_HOSTS }}
