@@ -27,7 +27,7 @@ jobs:
           --exclude .gitignore \
           --exclude .git \
           --exclude public \
-          . deploy@ec2-16-170-230-203.eu-north-1.compute.amazonaws.com:~/blog-crafter/
+          . ssh -i ~/.ssh/deploy_key deploy@ec2-16-170-230-203.eu-north-1.compute.amazonaws.com:~/blog-crafter/
       # job для перезапуска приложения при помощи pm2
       - name: Restart the application
         run: |
