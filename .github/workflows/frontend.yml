@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install dependencies
-        run: cd client && npm ci --ignore-scripts
+        run: ls && npm ci --ignore-scripts
       # Запуск сборки
       - name: Build
         run: npm run build
