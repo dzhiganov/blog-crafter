@@ -18,6 +18,7 @@ jobs:
       # Запуск сборки
       - name: Build
         run: npm run build
+        working-directory: ./client
       # Дальше по аналогии с backend, просто загружаем на сервер
       - name: Setup SSH
         run: |
@@ -37,4 +38,5 @@ jobs:
         run: |
           # воспользуемся SCP здесь, т.к. нам просто нужно загрузить из
           # одной директории
-          scp -r build/* deploy@ec2-16-170-230-203.eu-north-1.compute.amazonaws.com:~/blog-crafter/client/dist
+          scp -r dist/* deploy@ec2-16-170-230-203.eu-north-1.compute.amazonaws.com:~/blog-crafter/client/dist
+        working-directory: ./client
