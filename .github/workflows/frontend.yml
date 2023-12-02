@@ -36,7 +36,6 @@ jobs:
           SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
       - name: Copy files to the server
         run: |
-          # воспользуемся SCP здесь, т.к. нам просто нужно загрузить из
-          # одной директории
-          scp -r dist/* deploy@ec2-16-170-230-203.eu-north-1.compute.amazonaws.com:~/blog-crafter/client/dist
+          ls -la
+          # scp -r dist/* deploy@ec2-16-170-230-203.eu-north-1.compute.amazonaws.com:~/blog-crafter/client/dist
         working-directory: ./client
