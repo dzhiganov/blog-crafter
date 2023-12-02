@@ -10,9 +10,12 @@ on:
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./client
     steps:
       - name: Install dependencies
-        run: ls && npm ci --ignore-scripts
+        run: npm ci --ignore-scripts
       # Запуск сборки
       - name: Build
         run: npm run build
