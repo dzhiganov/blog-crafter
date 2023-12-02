@@ -36,5 +36,5 @@ jobs:
           SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
       - name: Copy files to the server
         run: |
-          scp -r ./dist/* deploy@ec2-16-170-230-203.eu-north-1.compute.amazonaws.com:~/blog-crafter/client/dist
+          scp -r ./dist/* deploy@ec2-16-170-230-203.eu-north-1.compute.amazonaws.com:~/blog-crafter/client
         working-directory: ./client
