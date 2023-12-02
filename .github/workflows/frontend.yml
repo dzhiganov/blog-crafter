@@ -19,17 +19,16 @@ jobs:
       - name: Build
         run: npm run build
         working-directory: ./client
+        env:
+          API_URL: ${{ secrets.API_URL }}
       # Дальше по аналогии с backend, просто загружаем на сервер
       - name: Setup SSH
         run: |
-          # создаем директорию для ключа
           mkdir -p ~/.ssh
-          # выводим содержимое нашей переменной окружения в файл
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           # ставим нужные безопасные права
           chmod 700 ~/.ssh
           chmod 600 ~/.ssh/id_rsa
-          # Добавляем отпечаток сервера
           echo "$SSH_KNOWN_HOSTS" >> ~/.ssh/known_hosts
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
