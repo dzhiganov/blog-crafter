@@ -20,7 +20,7 @@ jobs:
         run: npm run build
         working-directory: ./client
         env:
-          API_URL: "http://localhost:3000"
+          API_URL: ${{ secrets.VITE_API_URL }}
       # Дальше по аналогии с backend, просто загружаем на сервер
       - name: Setup SSH
         run: |
