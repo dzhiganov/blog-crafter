@@ -37,4 +37,4 @@ jobs:
         working-directory: ./server
       - name: Restart the application
         run: |
-          ssh deploy@ec2-16-170-230-203.eu-north-1.compute.amazonaws.com "pushd ~/blog-crafter/server && npm install && popd && pm2 restart ecosystem.config.js"
+          ssh deploy@ec2-16-170-230-203.eu-north-1.compute.amazonaws.com "cd ~/blog-crafter/server && npm install && pm2 restart ecosystem.config.js"
