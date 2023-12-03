@@ -23,7 +23,6 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-          # ставим нужные безопасные права
           chmod 700 ~/.ssh
           chmod 600 ~/.ssh/id_rsa
           echo "$SSH_KNOWN_HOSTS" >> ~/.ssh/known_hosts
@@ -32,5 +31,5 @@ jobs:
           SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
       - name: Copy files to the server
         run: |
-          scp -r dist/* deploy@ec2-16-170-230-203.eu-north-1.compute.amazonaws.com:~/blog-crafter/client
+          scp -r dist/* deploy@ec2-13-51-210-134.eu-north-1.compute.amazonaws.com:~/blog-crafter/client
         working-directory: ./client
