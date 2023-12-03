@@ -31,7 +31,7 @@ jobs:
         run: |
           rsync -a --progress --human-readable --delete \
           --exclude node_modules \
-          --exclude ecosystem.config.js
+          --exclude ecosystem.config.js \
           --exclude .git \
           . deploy@ec2-16-170-230-203.eu-north-1.compute.amazonaws.com:~/blog-crafter/server
         working-directory: ./server
