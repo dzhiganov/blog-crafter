@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useGetAccessToken } from '@/queries/get-access-token'
-import Cookies from 'js-cookie'
 import { onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import IconGithub from '@/components/icons/IconGithub.vue'
@@ -18,12 +17,12 @@ const openAuth = () => {
 }
 
 watch(accessToken, () => {
-  Cookies.set('github-access-token', String(accessToken.value), { secure: true })
+  localStorage.setItem('github-access-token', String(accessToken.value), { secure: true })
   router.replace('/projects')
 })
 
 onMounted(() => {
-  if (Cookies.get('github-access-token')) {
+  if (localStorage.getItem('github-access-token')) {
     router.replace('/projects')
   }
 })

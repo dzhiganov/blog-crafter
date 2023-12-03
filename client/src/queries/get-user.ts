@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/vue-query'
 import axios from 'axios'
 import { SERVER_URL } from './constants'
-import Cookie from 'js-cookie'
 
 type GetUserResponse = {
   login: string
@@ -15,7 +14,7 @@ export function useGetUser(): ReturnType<typeof useQuery<GetUserResponse>> {
     queryFn: async () => {
       const { data } = await axios.get(`${SERVER_URL}/user`, {
         headers: {
-          [`x-github-token`]: `${Cookie.get('github-access-token')}`
+          [`x-github-token`]: `${localStorage.getItem('github-access-token')}`
         }
       })
       return data

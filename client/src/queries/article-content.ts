@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/vue-query'
 import axios from 'axios'
 import { SERVER_URL } from './constants'
-import Cookie from 'js-cookie'
 import { marked } from 'marked'
 import type { MaybeRefOrGetter } from 'vue'
 
@@ -21,7 +20,7 @@ export function useGetArticleContentQuery(
         `${SERVER_URL}/content/${path}?user=${queryKey[1]}&repo=${repo}&branch=${branch}`,
         {
           headers: {
-            [`x-github-token`]: `${Cookie.get('github-access-token')}`
+            [`x-github-token`]: `${localStorage.getItem('github-access-token')}`
           }
         }
       )

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useRouter, useRoute } from 'vue-router'
-import Cookies from 'js-cookie'
 import { useGetUser } from '@/queries/get-user'
 import NavigationMenu from '@/components/NavigationMenu.vue'
 
@@ -9,7 +8,7 @@ const route = useRoute()
 const { data: user } = useGetUser()
 
 const handleLogout = () => {
-  Cookies.remove(`github-access-token`)
+  localStorage.removeItem(`github-access-token`)
   router.push({
     name: 'Login'
   })

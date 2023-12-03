@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import Cookies from 'js-cookie'
 import { ref, provide } from 'vue'
 
 const router = useRouter()
@@ -15,7 +14,7 @@ const showNotification = (message: string) => {
 provide('showNotification', showNotification)
 
 router.beforeEach(async (to) => {
-  const code = Cookies.get('github-access-token')
+  const code = localStorage.getItem('github-access-token')
 
   if (!code && to.name !== 'Login') {
     return { name: 'Login' }

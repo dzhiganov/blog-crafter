@@ -1,7 +1,6 @@
 import { useQuery, useMutation } from '@tanstack/vue-query'
 import axios from 'axios'
 import { SERVER_URL } from './constants'
-import Cookie from 'js-cookie'
 import type { ComputedRef } from 'vue'
 
 type GetArticlesParams = {
@@ -24,7 +23,7 @@ export function useGetArticlesQuery({
         `${SERVER_URL}/content?user=${queryKey[1]}&path=${queryKey[2]}&repo=${queryKey[3]}&branch=${queryKey[4]}`,
         {
           headers: {
-            [`x-github-token`]: `${Cookie.get('github-access-token')}`
+            [`x-github-token`]: `${localStorage.getItem('github-access-token')}`
           }
         }
       )
@@ -55,7 +54,7 @@ export function useUpdateArticle({
         },
         {
           headers: {
-            [`x-github-token`]: `${Cookie.get('github-access-token')}`
+            [`x-github-token`]: `${localStorage.getItem('github-access-token')}`
           }
         }
       )
@@ -89,7 +88,7 @@ export function useCreateNewArticle({
         },
         {
           headers: {
-            [`x-github-token`]: `${Cookie.get('github-access-token')}`
+            [`x-github-token`]: `${localStorage.getItem('github-access-token')}`
           }
         }
       )

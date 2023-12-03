@@ -21,7 +21,6 @@
     "@tiptap/starter-kit": "^2.1.12",
     "@tiptap/vue-3": "^2.1.12",
     "axios": "^1.6.0",
-    "js-cookie": "^3.0.5",
     "marked": "^9.1.5",
     "marked-metadata": "^0.0.6",
     "vue": "^3.3.4",
