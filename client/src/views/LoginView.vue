@@ -17,7 +17,7 @@ const openAuth = () => {
 }
 
 watch(accessToken, () => {
-  localStorage.setItem('github-access-token', String(accessToken.value), { secure: true })
+  localStorage.setItem('github-access-token', String(accessToken.value))
   router.replace('/projects')
 })
 
