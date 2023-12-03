@@ -31,9 +31,10 @@ jobs:
         run: |
           rsync -a --progress --human-readable --delete \
           --exclude node_modules \
+          --exclude ecosystem.config.js
           --exclude .git \
           . deploy@ec2-16-170-230-203.eu-north-1.compute.amazonaws.com:~/blog-crafter/server
         working-directory: ./server
       - name: Restart the application
         run: |
-          ssh deploy@ec2-16-170-230-203.eu-north-1.compute.amazonaws.com "pushd ~/blog-crafter/server && npm install && popd"
+          ssh deploy@ec2-16-170-230-203.eu-north-1.compute.amazonaws.com "pushd ~/blog-crafter/server && npm install && popd && pm2 restart ecosystem.config.js"
