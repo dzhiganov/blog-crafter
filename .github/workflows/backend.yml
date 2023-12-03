@@ -27,17 +27,12 @@ jobs:
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
-        - name: Copy files to the server
-        # заливаем файлы при помощи rsync
+      - name: Copy files to the server
         run: |
           rsync -a --progress --human-readable --delete \
-          # исключить все, что есть в .gitignore
           --exclude-from '.gitignore' \
-          # не загружаем .gitignore
           --exclude .gitignore \
-          # не загружаем .git
           --exclude .git \
-          # Не удаляем директорию с нашим фронтендом
           --exclude public \
           . deploy@ec2-16-170-230-203.eu-north-1.compute.amazonaws.com:~/blog-crafter/server
         working-directory: ./server
