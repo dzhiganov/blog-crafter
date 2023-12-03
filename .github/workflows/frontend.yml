@@ -3,7 +3,6 @@ name: Frontend
 on:
   push:
     branches: [main]
-
   workflow_dispatch:
 
 jobs:
@@ -31,5 +30,8 @@ jobs:
           SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
       - name: Copy files to the server
         run: |
-          scp -r dist/* deploy@ec2-13-51-210-134.eu-north-1.compute.amazonaws.com:~/blog-crafter/client
+          scp -r dist/* $SSH_USER@$SSH_HOST:~/blog-crafter/client
         working-directory: ./client
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
