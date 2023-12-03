@@ -16,7 +16,7 @@ export default async function (
   opts: FastifyServerOptions
 ) {
   fastify.delete<{ Reply: any }>(
-    "api/session",
+    "/api/session",
     async function handler(req, reply) {
       const token = req.headers[`x-github-token`];
 

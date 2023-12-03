@@ -15,7 +15,7 @@ export default async function (
   opts: FastifyServerOptions
 ) {
   fastify.get<{ Querystring: TQuerystring }>(
-    "api/content/:path",
+    "/api/content/:path",
     async (req, reply) => {
       const { path } = req.params as any;
       const { user = "", repo = "", branch = "main" } = req.query;
