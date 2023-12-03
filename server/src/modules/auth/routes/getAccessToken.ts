@@ -14,7 +14,7 @@ export default async function (
   opts: FastifyServerOptions
 ) {
   fastify.get<{ Reply: any; Querystring: Querystring }>(
-    "/get-access-token",
+    "api/get-access-token",
     async function handler(request, reply) {
       const params = `?client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&code=${request.query.code}&scope=repo user`;
 

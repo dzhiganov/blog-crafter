@@ -13,7 +13,7 @@ type TQuerystring = {
 export default async function (fastify: FastifyInstance) {
   fastify.get<{
     Querystring: TQuerystring;
-  }>("/content", async (res, reply) => {
+  }>("api/content", async (res, reply) => {
     const token = res.headers[`x-github-token`];
     const { user = "", repo = "", path = "", branch = "main" } = res.query;
     const responseContent = await fetch(

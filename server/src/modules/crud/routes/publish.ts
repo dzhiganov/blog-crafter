@@ -23,7 +23,7 @@ export default async function (
   opts: FastifyServerOptions
 ) {
   fastify.put<{ Body: PublishRequestBody; Reply: any }>(
-    "/publish",
+    "api/publish",
     async function handler(req, reply) {
       const {
         path: pathInRepo = "",
@@ -81,7 +81,7 @@ export default async function (
   };
 
   fastify.post<{ Body: CreateNewArticleRequestBody; Reply: any }>(
-    "/publish",
+    "api/publish",
     async (req, res) => {
       const {
         name = "",

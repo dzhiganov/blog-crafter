@@ -20,7 +20,7 @@ export default async function (
   opts: FastifyServerOptions
 ) {
   fastify.get<{ Reply: any; Querystring: Querystring }>(
-    "/user",
+    "api/user",
     async function handler(req, reply) {
       const token = req.headers[`x-github-token`];
       const responseContent = await fetch(`${GIT_HUB_API_URL}/user`, {
