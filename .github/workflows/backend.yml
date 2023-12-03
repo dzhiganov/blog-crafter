@@ -30,10 +30,8 @@ jobs:
       - name: Copy files to the server
         run: |
           rsync -a --progress --human-readable --delete \
-          --exclude-from '.gitignore' \
-          --exclude .gitignore \
+          --exclude node_modules \
           --exclude .git \
-          --exclude public \
           . deploy@ec2-16-170-230-203.eu-north-1.compute.amazonaws.com:~/blog-crafter/server
         working-directory: ./server
       - name: Restart the application
