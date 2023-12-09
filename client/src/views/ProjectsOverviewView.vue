@@ -84,7 +84,7 @@ const isDirty = computed(() => {
       <h3 class="text-h3 mb-4">{{ projectId }}</h3>
       <a :href="repo?.html_url">Open repository</a>
     </div>
-    <div class="mb-12">
+    <div class="mb-12" :class="$style.settings">
       <h3 class="text-h4 mb-4">Settings</h3>
       <v-text-field v-model="pathToContent" label="Path to content" />
       <v-text-field v-model="branch" label="Branch name (Optional)" />
@@ -111,9 +111,10 @@ const isDirty = computed(() => {
         width="500"
         v-if="isArticlesFetching || isArticlesFetching"
         type="list-item-three-line"
+        class="bg-white"
       ></v-skeleton-loader>
-      <v-list v-else>
-        <v-list-item v-for="{ parent = '' } in articles" :key="parent" class="pl-0">
+      <v-list v-else class="bg-white">
+        <v-list-item v-for="{ parent = '' } in articles" :key="parent" class="pl-0 bg-white">
           <router-link :to="`/projects/${projectId}/articles/${encodeURIComponent(parent)}`">
             {{ parent.split('/')[parent.split('/').length - 1] }}</router-link
           >
@@ -122,3 +123,8 @@ const isDirty = computed(() => {
     </div>
   </LayoutItem>
 </template>
+<style module>
+.settings {
+  width: 400px;
+}
+</style>

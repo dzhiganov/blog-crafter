@@ -103,8 +103,6 @@ export default async function (
 
       md = `${metaText}---\n${md}`;
 
-      console.log("md", md);
-
       return;
       const REPO = repo;
       const BRANCH = branch;

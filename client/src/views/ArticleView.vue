@@ -51,42 +51,59 @@ function handleSave() {
     repo: String(projectId)
   })
 }
+const articleName = computed(() => {
+  const items = String(articleId).split('/')
+  return items[items.length - 1]
+})
 </script>
 <template>
   <LayoutItem>
     <div :class="$style.wrapper">
-      <div class="d-flex justify-end">
-        <v-btn
-          variant="tonal"
-          color="#5865f2"
-          class="text-subtitle-1"
-          @click="handleSave"
-          size="large"
-          >Save</v-btn
-        >
-      </div>
+      <header :class="$style.header">
+        <h2 class="text-h4 m-0 p-0">{{ `${projectId}/${articleName}` }}</h2>
+        <div class="d-flex justify-end">
+          <v-btn
+            variant="tonal"
+            color="#5865f2"
+            class="text-subtitle-1"
+            @click="handleSave"
+            size="large"
+            >Save</v-btn
+          >
+        </div>
+      </header>
+
       <v-skeleton-loader
         width="500"
         v-if="isLoading || isFetching"
         type="article"
+        class="bg-white"
       ></v-skeleton-loader>
-      <div v-if="!isLoading || isFetching">
+      <div v-if="!isLoading && !isFetching">
         <h2>Meta</h2>
-        <MetaFields ref="metaFieldsComponent" />
+        <MetaFields ref="metaFieldsComponent" :initialData="articleContent?.meta" />
       </div>
-
-      <h2 v-if="!isLoading || !isFetching">Content</h2>
-      <EditorItem
-        v-if="!isLoading && !isFetching"
-        ref="editorComponent"
-        :initial-content="articleContent?.md ?? ''"
-      />
+      <div>
+        <h2 v-if="!isLoading || !isFetching">Content</h2>
+        <EditorItem
+          v-if="!isLoading && !isFetching"
+          ref="editorComponent"
+          :initial-content="articleContent?.md ?? ''"
+        />
+      </div>
     </div>
   </LayoutItem>
 </template>
 <style module>
 .wrapper {
-  max-width: 800px;
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
 }
 </style>

@@ -5,5 +5,5 @@ export const getFromStorage = (key: string, defaultValue: string | null = null) 
 }
 
 export const setIntoStorage = (key: string, value: unknown) => {
-  localStorage.setItem(key, String(value))
+  localStorage.setItem(key, JSON.stringify(value))
 }

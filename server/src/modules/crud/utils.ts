@@ -1,6 +1,6 @@
 import { readFile } from "fs/promises";
 import path from "path";
-import { globby } from "globby";
+import globby from "globby";
 import fetch from "node-fetch";
 import { GIT_HUB_API_HEADERS } from "./constants.js";
 import {

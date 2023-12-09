@@ -56,13 +56,13 @@ function toObject(text: string) {
   const [start, end] = ["---", "---"];
 
   function toJSON(data: string) {
-    if (!data) return {};
+    if (!data.trim()) return {};
 
     const tmp: Record<string, string> = {};
     const lines = data.trim().split("\n");
     lines.forEach((line) => {
       const [key, val] = line.trim().split(":");
-      tmp[key] = val;
+      tmp[key] = val.trim();
     });
     return tmp;
   }
@@ -70,7 +70,7 @@ function toObject(text: string) {
   function getMarkdownHeader(data: string) {
     const strReg = "^" + start + "([\\s|\\S]*?)" + end;
     const reg = new RegExp(strReg);
-    const file = reg.exec(text);
+    const file = reg.exec(data);
     return file ? file[1] : "";
   }
 

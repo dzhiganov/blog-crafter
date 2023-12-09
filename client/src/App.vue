@@ -16,7 +16,7 @@ provide('showNotification', showNotification)
 router.beforeEach(async (to) => {
   const code = localStorage.getItem('github-access-token')
 
-  if (!code && to.name !== 'Login') {
+  if (!code && !['Login', 'About'].includes(String(to.name))) {
     return { name: 'Login' }
   }
 })
@@ -30,7 +30,6 @@ const closeNotification = () => {
 <template>
   <v-app>
     <RouterView />
-
     <v-snackbar v-model="notificationIsOpen" :timeout="5000" color="white">
       {{ notificationMessage }}
       <template v-slot:actions>

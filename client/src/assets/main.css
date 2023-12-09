@@ -3,11 +3,9 @@
 #app {
   margin: 0 auto;
   font-weight: normal;
-  background-color: #fff;
-}
-
-h2 {
-  margin: 2em 0 0.75em 0;
+  padding: 0 1em;
+  max-width: 1440px;
+  position: relative;
 }
 
 a,

@@ -1,12 +1,13 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 
-const { initialData } = defineProps({
+const props = defineProps({
   initialData: {
     type: Object,
     default: null
   }
 })
+const { initialData } = props
 
 defineExpose({
   getMetaData: () => Object.fromEntries(fields.value)

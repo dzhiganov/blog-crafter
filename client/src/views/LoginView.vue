@@ -3,6 +3,7 @@ import { useGetAccessToken } from '@/queries/get-access-token'
 import { onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import IconGithub from '@/components/icons/IconGithub.vue'
+import IconLogo from '@/components/icons/IconLogo.vue'
 
 const CLIENT_ID = '3770f00f3de023a8260b'
 
@@ -29,35 +30,87 @@ onMounted(() => {
 </script>
 
 <template>
-  <div :class="$style.container">
-    <div :class="$style.loginContainer">
-      <h1 :class="$style.logo">🛠️ Blog Crafter</h1>
-      <v-btn class="text-h6 mb-4" @click="openAuth" variant="tonal" size="large">
-        <IconGithub />
-        <span class="ml-2">Login with GitHub</span>
-      </v-btn>
+  <div :class="$style.wrapper">
+    <div :class="$style.header">
+      <IconLogo />
     </div>
+    <div :class="$style.content">
+      <div :class="$style.textContent">
+        <div :class="$style.title">Craft Your Ideas,<br />Shape Your Story</div>
+        <div :class="$style.description">
+          With a user-friendly WYSIWYG editor, effortlessly create and edit markdown files, then
+          effortlessly publish your stories on GitHub
+        </div>
+        <div :class="$style.loginContainer">
+          <v-btn
+            class="text-h6 mb-4"
+            @click="openAuth"
+            variant="flat"
+            size="large"
+            color="blue-grey-darken-4"
+          >
+            <IconGithub />
+            <span class="ml-2">Login with GitHub</span>
+          </v-btn>
+        </div>
+        <router-link to="/about">What is a Blog Crafter?</router-link>
+      </div>
+
+      <div :class="$style.imageContent">
+        <img src="/dashboard-image.png" />
+      </div>
+    </div>
+
+    <RouterView />
   </div>
-  <RouterView />
 </template>
 
 <style module>
-.container {
-  display: flex;
+.wrapper {
   width: 100%;
-  justify-content: center;
   height: 100vh;
+  background-color: #f5f5f5;
+}
+.content {
+  display: flex;
+  margin-top: 5em;
+  justify-content: space-between;
 }
 
+.textContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+.title {
+  color: #1f1f1f;
+  font-weight: 800;
+  font-size: 3.2em;
+  line-height: normal;
+}
+
+.description {
+  max-width: 300px;
+}
 .loginContainer {
   display: flex;
   flex-direction: column;
-  gap: 22px;
-  margin-top: 200px;
+  width: fit-content;
+  align-items: flex-start;
 }
 .logo {
   color: #5865f2;
   font-weight: 700;
   font-size: 42px;
+}
+
+.header {
+  padding-top: 1em;
+}
+
+.imageContent {
+  flex-shrink: 0;
+  max-width: 800px;
+  box-shadow: rgba(0, 0, 0, 0.14902) 0px 10px 20px 0px;
 }
 </style>

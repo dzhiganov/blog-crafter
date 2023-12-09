@@ -4,6 +4,7 @@ import ProjectsView from '../views/ProjectsView.vue'
 import ProjectsOverviewView from '../views/ProjectsOverviewView.vue'
 import NewArticleView from '../views/NewArticleView.vue'
 import ArticleView from '../views/ArticleView.vue'
+import AboutView from '../views/AboutView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -12,6 +13,11 @@ const router = createRouter({
       path: '/',
       name: 'Login',
       component: LoginView
+    },
+    {
+      path: '/about',
+      name: 'About',
+      component: AboutView
     },
     {
       path: '/projects',

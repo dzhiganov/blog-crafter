@@ -1,5 +1,4 @@
 import { FastifyInstance, FastifyServerOptions } from "fastify";
-import fetch from "node-fetch";
 import axios from "axios";
 
 const CLIENT_ID = "3770f00f3de023a8260b";
@@ -36,21 +35,6 @@ export default async function (
           },
         }
       );
-      //   const responseContent = await fetch(
-      //     `https://api.github.com/applications/${CLIENT_ID}/grant`,
-      //     {
-      //       method: "DELETE",
-      //       headers: {
-      //         ...GIT_HUB_API_HEADERS,
-      //         Authorization:
-      //           "token " +
-      //           Buffer.from(CLIENT_ID + ":" + CLIENT_SECRET).toString("base64"),
-      //       },
-      //       body: `{"access_token":"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"}`,
-      //     }
-      //   ).then((d) => d.json());
-
-      console.log("response content: " + res);
     }
   );
 }

@@ -2,6 +2,7 @@
 import { useRouter, useRoute } from 'vue-router'
 import { useGetUser } from '@/queries/get-user'
 import NavigationMenu from '@/components/NavigationMenu.vue'
+import IconLogo from '@/components/icons/IconLogo.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -16,8 +17,7 @@ const handleLogout = () => {
 </script>
 
 <template>
-  <header>
-    <h1 :class="$style.logo">🛠️ Blog Crafter</h1>
+  <header :class="$style.header">
     <div>
       <v-row justify="end">
         <v-menu min-width="200px" rounded>
@@ -39,7 +39,7 @@ const handleLogout = () => {
       </v-row>
     </div>
   </header>
-  <main>
+  <main :class="$style.main">
     <slot></slot>
   </main>
 
@@ -47,28 +47,22 @@ const handleLogout = () => {
 </template>
 
 <style module>
-header {
+.header {
   line-height: 1.5;
   height: 60px;
   padding: 1em 3em 1em 1em;
   display: flex;
   justify-content: space-between;
-  border-bottom: 1px solid #ccc;
   align-items: center;
-  margin-bottom: 1rem;
-  position: fixed;
-  top: 0;
-  z-index: 1;
-  background-color: #fff;
-  left: 0;
-  right: 0;
 }
 
-main {
+.main {
   padding: 0 1rem 0 1rem;
-  margin-left: 300px;
-  margin-top: 60px;
-  padding: 22px;
+  margin-left: 160px;
+  padding: 40px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.14902) 0px 10px 20px 0px;
 }
 
 .logo {

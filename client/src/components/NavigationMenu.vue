@@ -1,9 +1,64 @@
+<script lang="ts" setup>
+import { computed, ref } from 'vue'
+import { getFromStorage } from '@/utils/persistentStorage'
+import IconLogo from '@/components/icons/IconLogo.vue'
+
+const open = ref(['Users'])
+const currentFavorites = getFromStorage('favorites')
+const favoritesState = ref<string[]>(currentFavorites ? JSON.parse(currentFavorites) : [])
+// const items = computed(() => [
+//   {
+//     title: 'Projects',
+//     action: 'construction',
+//     active: true,
+//     items: favoritesState.value.map((projectName) => ({
+//       title: projectName,
+//       link: `projects/${projectName}`
+//     }))
+//   }
+// ])
+const items = [
+  {
+    title: 'Projects',
+    icon: 'construction',
+    items: favoritesState.value.map((projectName) => ({
+      title: projectName,
+      link: `/projects/${projectName}`
+    })),
+    active: true
+  }
+]
+</script>
+
 <template>
-  <nav :class="$style.nav" permanent width="300">
-    <v-list>
-      <v-list-item link title="Projects" to="/projects" />
+  <v-navigation-drawer>
+    <v-list v-model:opened="open">
+      <v-list-subheader>
+        <IconLogo />
+      </v-list-subheader>
+      <v-list-group value="Users">
+        <template v-slot:activator="{ props }">
+          <v-list-item
+            v-bind="props"
+            prepend-icon="dashboard"
+            title="Projects"
+            color="grey-darken-2"
+          >
+          </v-list-item>
+        </template>
+
+        <v-list-item
+          link
+          v-for="({ title, link }, i) in items[0].items"
+          :key="i"
+          :title="title"
+          :value="title"
+          :to="link"
+        ></v-list-item>
+        <v-list-item title="Back to all projects" link to="/projects"></v-list-item>
+      </v-list-group>
     </v-list>
-  </nav>
+  </v-navigation-drawer>
 </template>
 
 <style module>
@@ -12,6 +67,5 @@
   height: 100%;
   position: fixed;
   width: 300px;
-  border-right: 1px solid #ccc;
 }
 </style>
