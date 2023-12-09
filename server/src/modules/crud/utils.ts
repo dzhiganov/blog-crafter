@@ -1,6 +1,6 @@
 import { readFile } from "fs/promises";
 import path from "path";
-import * as globby from "globby";
+import fg from "fast-glob";
 import fetch from "node-fetch";
 import { GIT_HUB_API_HEADERS } from "./constants.js";
 import {
@@ -151,7 +151,7 @@ export class Articles {
     branch: any
   ) {
     const currentCommit = await this.getCurrentCommit(this.user, repo, branch);
-    const filesPaths = globby.sync(pathToFile);
+    const filesPaths = await fg.glob(pathToFile);
     const filesBlobs = await Promise.all(
       filesPaths.map(this.createBlobForFile(this.user, repo))
     );
