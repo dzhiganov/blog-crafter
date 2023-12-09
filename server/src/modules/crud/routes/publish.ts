@@ -6,7 +6,6 @@ import { fileURLToPath } from "url";
 import { dirname } from "path";
 import { FastifyInstance, FastifyServerOptions } from "fastify";
 import { Articles } from "../utils.js";
-import MarkdownIt from "markdown-it";
 
 type PublishRequestBody = {
   path: string;

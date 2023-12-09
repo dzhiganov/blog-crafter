@@ -6,18 +6,7 @@ import IconLogo from '@/components/icons/IconLogo.vue'
 const open = ref(['Users'])
 const currentFavorites = getFromStorage('favorites')
 const favoritesState = ref<string[]>(currentFavorites ? JSON.parse(currentFavorites) : [])
-// const items = computed(() => [
-//   {
-//     title: 'Projects',
-//     action: 'construction',
-//     active: true,
-//     items: favoritesState.value.map((projectName) => ({
-//       title: projectName,
-//       link: `projects/${projectName}`
-//     }))
-//   }
-// ])
-const items = [
+const items = computed(() => [
   {
     title: 'Projects',
     icon: 'construction',
@@ -27,21 +16,23 @@ const items = [
     })),
     active: true
   }
-]
+])
 </script>
 
 <template>
   <v-navigation-drawer>
     <v-list v-model:opened="open">
       <v-list-subheader>
-        <IconLogo />
+        <div :class="$style.logo">
+          <IconLogo />
+        </div>
       </v-list-subheader>
       <v-list-group value="Users">
         <template v-slot:activator="{ props }">
           <v-list-item
             v-bind="props"
             prepend-icon="dashboard"
-            title="Projects"
+            title="My Projects"
             color="grey-darken-2"
           >
           </v-list-item>
@@ -67,5 +58,10 @@ const items = [
   height: 100%;
   position: fixed;
   width: 300px;
+}
+
+.logo {
+  padding-bottom: 2em;
+  transform: scale(0.75) translateX(-25px);
 }
 </style>
