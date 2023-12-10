@@ -30,6 +30,11 @@ const vuetify = createVuetify({
           background: colors.grey.lighten4,
           surface: colors.grey.lighten4
         }
+      },
+      dark: {
+        colors: {
+          surface: colors.blueGrey.darken4
+        }
       }
     }
   }

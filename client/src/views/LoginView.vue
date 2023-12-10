@@ -33,6 +33,7 @@ onMounted(() => {
   <div :class="$style.wrapper">
     <div :class="$style.header">
       <IconLogo />
+      Blog Crafter
     </div>
     <div :class="$style.content">
       <div :class="$style.textContent">
@@ -106,6 +107,11 @@ onMounted(() => {
 
 .header {
   padding-top: 1em;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  gap: 8px;
 }
 
 .imageContent {
