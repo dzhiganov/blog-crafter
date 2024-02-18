@@ -4,6 +4,7 @@ import { getFromStorage } from '@/utils/persistentStorage'
 import IconLogoDark from '@/components/icons/IconLogoDark.vue'
 
 const open = ref(['Users'])
+
 const currentFavorites = getFromStorage('favorites')
 const favoritesState = ref<string[]>(currentFavorites ? JSON.parse(currentFavorites) : [])
 const items = computed(() => [
